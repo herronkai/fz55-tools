@@ -129,6 +129,52 @@ converter interpolates between calibrated focal lengths.
   file. It never talks to a camera, and no firmware is included in this repo.
 - `tools/decode_fz55_raw.py`: dumps a RAW to a 16-bit grayscale TIFF mosaic.
 
+## Roadmap
+
+Not yet implemented, or only partly done:
+
+- [ ] **Lens correction at every zoom step.** The FZ55 zooms in 9 fixed steps,
+  which it records in EXIF. Only the widest is calibrated so far:
+
+  | Focal length | 35 mm equiv. | Calibrated |
+  |---|---|---|
+  | 5.1 mm | 28 mm | ✅ |
+  | 6.4 mm | 36 mm | ☐ |
+  | 7.8 mm | 43 mm | ☐ |
+  | 9.5 mm | 53 mm | ☐ |
+  | 11.5 mm | 64 mm | ☐ |
+  | 14.0 mm | 78 mm | ☐ |
+  | 16.9 mm | 95 mm | ☐ |
+  | 20.6 mm | 115 mm | ☐ |
+  | 25.5 mm | 142 mm | ☐ |
+
+  Each step needs one bright, textured RAW+JPEG pair run through
+  `fz55_calibrate.py`. Shots at uncalibrated steps currently convert without
+  distortion correction.
+- [ ] **True Sony colour reference.** Fit the look table to Sony renders of the
+  same scenes, shot side by side with a Sony body, instead of to the FZ55's
+  own JPEGs. `FZ55 Vivid` is only an approximation.
+- [ ] **Dual-illuminant colour.** Add a tungsten matrix (`ColorMatrix2`). The
+  current single daylight matrix is least accurate under warm indoor light.
+- [ ] **Reds in the look table.** On held-out shots, reds keep about 86% of
+  the camera's colour; every other hue keeps 95–100%.
+- [ ] **Lateral chromatic aberration.** Correct each colour plane separately
+  with `WarpRectilinear`. Measurements so far are too noisy to embed.
+- [ ] **Vignetting correction** (`FixVignetteRadial`). Not measured reliably
+  yet; the RAW dump may already include the camera's own shading correction.
+- [ ] **Noise profile** (`NoiseProfile` tag), so Lightroom's noise reduction is
+  tuned to this sensor at each ISO.
+- [ ] **Shadow data below black.** The diagnostic dump clips at black level, so
+  the shadow noise floor is lost. A pre-subtraction dump mode in the firmware
+  would help shadow recovery.
+- [ ] **Better RAW/JPEG pairing.** Sometimes the camera writes consecutive RAWs
+  without a JPEG in between. Those shots get default white balance and no
+  metadata. Pairing by timestamp could recover some of them.
+- [ ] **Lossless compression.** DNGs are uncompressed, about 32 MB each.
+- [ ] **Cross-platform look fitting.** `fz55_look.py fit` needs macOS and
+  Photoshop 2026. Conversion and profile installation don't.
+- [ ] **Other firmware versions.** Only v1.06 has been tested.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
