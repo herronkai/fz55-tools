@@ -1,0 +1,47 @@
+# Allowlist: ignore everything, then allow only the published sources.
+/*
+!/.gitignore
+!/README.md
+!/LICENSE
+!/requirements.txt
+!/tools/
+!/sd-card/
+
+# Personal photos, captures, conversions and backups (never published)
+/output/
+/captures/
+/backups/
+/experiments/
+# Kodak firmware and material derived from it (not redistributable)
+/firmware/
+/analysis/
+
+# Never commit images, raw files or binaries, wherever they are
+*.RAW
+*.raw
+*.dng
+*.DNG
+*.ARW
+*.arw
+*.JPG
+*.jpg
+*.jpeg
+*.JPEG
+*.png
+*.PNG
+*.tif
+*.tiff
+*.TIF
+*.THM
+*.MOV
+*.mov
+*.MP4
+*.mp4
+*.dcp
+*.bin
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
